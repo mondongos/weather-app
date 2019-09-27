@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 function CitiesNav ({selected, onUpdateCity}) {
     const cities = ["London", "Boston", "Glasgow", "New York", "Aberdeen", "Philadelphia", "Chicago"]
+
     return (
         <ul className="flex-center">
             {cities.map((city) => (
@@ -18,7 +20,10 @@ function CitiesNav ({selected, onUpdateCity}) {
     )
 }
 
-
+CitiesNav.PropTypes = {
+    selected: PropTypes.string.isRequired, 
+    onUpdateCity: PropTypes.func.isRequired
+}
 
 export default class Weather extends React.Component {
     constructor(props) {
