@@ -1,5 +1,25 @@
 import React from 'react'
 
+function CitiesNav ({selected, onUpdateCity}) {
+    const cities = ["London", "Boston", "Glasgow", "New York", "Aberdeen", "Philadelphia", "Chicago"]
+    return (
+        <ul className="flex-center">
+            {cities.map((city) => (
+                <li key={city}>
+                    <button 
+                    className="btn-clear nav-link" 
+                    style={city === selected ? {color: "purple"} : null}
+                    onClick={() => onUpdateCity(city)}>
+                    {city}
+                    </button>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+
+
 export default class Weather extends React.Component {
     constructor(props) {
         super(props)
@@ -18,20 +38,14 @@ export default class Weather extends React.Component {
     }
 
     render() {
-        const cities = ["London", "Boston", "Glasgow", "New York", "Aberdeen", "Philadelphia", "Chicago"]
-        return(
-            <ul className="flex-center">
-                {cities.map((city) => (
-                    <li key={city}>
-                        <button 
-                        className="btn-clear nav-link" 
-                        style={city === this.state.selectedCity ? {color: "purple"} : null}
-                        onClick={() => this.updateCity(city)}>
-                        {city}
-                        </button>
-                    </li>
-                ))}
-            </ul>
+        const { selectedCity } = this.state
+        return (
+            <React.Fragment>
+                <CitiesNav
+                selected = { selectedCity }
+                onUpdateCity = {this.updateCity}>
+                </CitiesNav>
+            </React.Fragment>
         )
     }
 }
