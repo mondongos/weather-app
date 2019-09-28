@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fetchWeather } from '../utils/weatherAPI'
 
 function CitiesNav ({selected, onUpdateCity}) {
-    const cities = ["London", "Boston", "Glasgow", "New York", "Aberdeen", "Philadelphia", "Chicago"]
+    const cities = ["London", "Boston", "Philadelphia", "Glasgow", "Aberdeen", "Chicago"]
 
     return (
         <ul className="flex-center">
@@ -20,7 +21,7 @@ function CitiesNav ({selected, onUpdateCity}) {
     )
 }
 
-CitiesNav.PropTypes = {
+CitiesNav.propTypes = {
     selected: PropTypes.string.isRequired, 
     onUpdateCity: PropTypes.func.isRequired
 }
@@ -30,26 +31,49 @@ export default class Weather extends React.Component {
         super(props)
 
         this.state = {
-            selectedCity: "London"
+            selectedCity: "London", 
+            cityWeatherAPI: null, 
+            error: null
         }
 
         this.updateCity = this.updateCity.bind(this)
+        this.isLoading = this.isLoading.bind(this)
     }
 
-    updateCity (selectedCity) {
+    updateCity(selectedCity) {
         this.setState({
-            selectedCity
+            selectedCity, 
+            error: null, 
+            cityWeatherAPI: null
+        })
+
+        fetchWeather(selectedCity) 
+        .then((cityWeatherAPI) => this.setState({
+            cityWeatherAPI, 
+            error: null,
+        }))
+        .catch(() => {
+            console.warn("Error fetching API: ")
+            this.setState({
+                error: "There was an error fetching the weather API"
+            })
         })
     }
 
+    isLoading() {
+        return this.state.cityWeatherAPI === null && this.state.error === null
+    }
+
     render() {
-        const { selectedCity } = this.state
+        const { selectedCity, cityWeatherAPI, error } = this.state
         return (
             <React.Fragment>
                 <CitiesNav
                 selected = { selectedCity }
-                onUpdateCity = {this.updateCity}>
-                </CitiesNav>
+                onUpdateCity = {this.updateCity}/>
+                {this.isLoading() && <p>ITS RAINING HALS</p>}
+                {error && <p>{error}</p>}
+                {cityWeatherAPI && <pre>{JSON.stringify(cityWeatherAPI, null, 2)}</pre>}
             </React.Fragment>
         )
     }
