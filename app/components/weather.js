@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { fetchWeather } from '../utils/weatherAPI'
+import { FaUser } from 'react-icons'
 
 function CitiesNav ({selected, onUpdateCity}) {
     const cities = ["London", "Boston", "Philadelphia", "Glasgow", "Aberdeen", "Chicago"]
-
     return (
         <ul className="flex-center">
             {cities.map((city) => (
@@ -30,17 +30,20 @@ CitiesNav.propTypes = {
 function WeatherCards ({cityWeather}) {
     return (
         <div className="city-container">
+             <div className="weather-type">
+                 <img
+                 src={"http://openweathermap.org/img/w/" + cityWeather.weather[0].icon + ".png" }
+                 />
+            </div>
             <div className="weather-type">
-                {JSON.stringify(cityWeather.weather[0].main, null, 2)}
+                {cityWeather.weather[0].main}
             </div>
-            <div className="weather-type-desc">
-                {JSON.stringify(cityWeather.weather[0].description, null, 2)}
+            <div className="weather-type">
+                {(cityWeather.weather[0].description)}
             </div>
-            <div className="temp">
-                {JSON.stringify(cityWeather.main.temp, null, 2)}
+            <div className="weather-type">
+                {Math.round(parseInt(cityWeather.main.temp) - 273.15) + "℃"} 
             </div>
-           
-
         </div>
     )
 }
@@ -94,7 +97,7 @@ export default class Weather extends React.Component {
                 <CitiesNav
                 selected = { selectedCity }
                 onUpdateCity = {this.updateCity}/>
-                {this.isLoading() && <p>ITS RAINING HALS</p>}
+                {this.isLoading() && <p>LOADING</p>}
                 {error && <p>{error}</p>}
                 {cityWeatherAPI && <WeatherCards cityWeather={cityWeatherAPI} />}
             </React.Fragment>

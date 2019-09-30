@@ -39,3 +39,8 @@ html, body, #app {
     text-decoration: none;
     color: inherit;
   }
+  .weather-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
