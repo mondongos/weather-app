@@ -21,17 +21,32 @@ function CitiesNav ({selected, onUpdateCity}) {
     )
 }
 
+
 CitiesNav.propTypes = {
     selected: PropTypes.string.isRequired, 
     onUpdateCity: PropTypes.func.isRequired
 }
 
-function WeatherCards ({cityWeatherAPI}) {
+function WeatherCards ({cityWeather}) {
     return (
-        <div>
-            <pre>{JSON.stringify(cityWeatherAPI, null, 2)}</pre>
+        <div className="city-container">
+            <div className="weather-type">
+                {JSON.stringify(cityWeather.weather[0].main, null, 2)}
+            </div>
+            <div className="weather-type-desc">
+                {JSON.stringify(cityWeather.weather[0].description, null, 2)}
+            </div>
+            <div className="temp">
+                {JSON.stringify(cityWeather.main.temp, null, 2)}
+            </div>
+           
+
         </div>
     )
+}
+
+WeatherCards.propTypes = {
+    cityWeather: PropTypes.object.isRequired
 }
 
 export default class Weather extends React.Component {
@@ -81,7 +96,7 @@ export default class Weather extends React.Component {
                 onUpdateCity = {this.updateCity}/>
                 {this.isLoading() && <p>ITS RAINING HALS</p>}
                 {error && <p>{error}</p>}
-                {cityWeatherAPI && <WeatherCards cityWeatherAPI={cityWeatherAPI} />}
+                {cityWeatherAPI && <WeatherCards cityWeather={cityWeatherAPI} />}
             </React.Fragment>
         )
     }
